@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 const experience = [
   {
     role: "AI Product Engineer",
@@ -112,7 +116,40 @@ const skills = [
   "OpenClaw",
 ];
 
-const contact = [
+const photos = [
+  {
+    src: "/gallery/space-screen.jpg",
+    alt: "A space visualization on a large display",
+    title: "Space systems",
+    caption: "Curiosity, hardware, and scientific data in the same room.",
+  },
+  {
+    src: "/gallery/team-portrait.jpg",
+    alt: "Team portrait in matching shirts",
+    title: "Team work",
+    caption: "Building with people has shaped as much of my path as building with code.",
+  },
+  {
+    src: "/gallery/engineering-workshop.jpg",
+    alt: "Engineering workshop setup",
+    title: "Engineering floor",
+    caption: "The kind of place where math becomes wiring, testing, and iteration.",
+  },
+  {
+    src: "/gallery/lab-robotics.jpg",
+    alt: "Lab robotics setup",
+    title: "Lab textures",
+    caption: "Machines, measurement, and the quiet beauty of instruments.",
+  },
+  {
+    src: "/gallery/outdoor-portrait.jpg",
+    alt: "Outdoor portrait in a scenic setting",
+    title: "Between things",
+    caption: "A softer note between research, product work, and school.",
+  },
+];
+
+const contactLinks = [
   { label: "Email", value: "nurkkyz@gmail.com", href: "mailto:nurkkyz@gmail.com" },
   { label: "GitHub", value: "github.com/nurkyzaz", href: "https://github.com/nurkyzaz" },
   {
@@ -143,11 +180,69 @@ function PhotonMark() {
   );
 }
 
+function ContactForm() {
+  const [form, setForm] = useState({ name: "", contact: "", message: "" });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const subject = encodeURIComponent(
+      `Message from ${form.name.trim() || "someone who visited your site"}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${form.name || "n/a"}\nContact: ${form.contact || "n/a"}\n\n${form.message || ""}`
+    );
+
+    window.location.href = `mailto:nurkkyz@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+  return (
+    <form className="contact-form panel" onSubmit={handleSubmit}>
+      <div className="form-row">
+        <label>
+          <span>Your name</span>
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Your name"
+          />
+        </label>
+        <label>
+          <span>Email or social</span>
+          <input
+            name="contact"
+            value={form.contact}
+            onChange={handleChange}
+            placeholder="Email, LinkedIn, or Instagram"
+          />
+        </label>
+      </div>
+      <label className="message-field">
+        <span>Your message</span>
+        <textarea
+          name="message"
+          value={form.message}
+          onChange={handleChange}
+          placeholder="Leave a comment, question, or idea."
+          rows={6}
+        />
+      </label>
+      <button className="button button-primary form-button" type="submit">
+        Send note
+      </button>
+    </form>
+  );
+}
+
 export default function Page() {
   return (
     <main className="page-shell">
-      <div className="background-orb background-orb-a" />
-      <div className="background-orb background-orb-b" />
       <div className="stars" />
 
       <header className="topbar">
@@ -161,26 +256,30 @@ export default function Page() {
           <a href="#about">About</a>
           <a href="#experience">Experience</a>
           <a href="#research">Projects/Research</a>
+          <a href="#photos">Photos</a>
           <a href="#skills">Skills</a>
           <a href="#contact">Contact</a>
         </nav>
       </header>
 
       <section className="hero" id="top">
+        <img
+          className="hero-image"
+          src="/gallery/hero-portrait.jpg"
+          alt="Nurkyz Ydyrysova holding flowers"
+        />
+        <div className="hero-shade" />
         <div className="hero-copy">
           <p className="eyebrow">AI + Physics @ CUHK</p>
-          <h1>
-            AI Product Engineer in Hong Kong.
-            <span> Undergrad Researcher in Physics for ML.</span>
-          </h1>
+          <h1>Nurkyz Ydyrysova</h1>
           <p className="hero-text">
-            I build ML systems that connect physics and data.
+            AI Product Engineer in Hong Kong and undergraduate researcher in ML
+            for scientific data.
           </p>
           <p className="hero-note">
-            "I'm a first-year undergrad exploring different domains to find my
-            true passion in science." "Rn I'm most interested in this question:
-            How do we compress information into laws and extract laws from
-            information?"
+            I build ML systems that connect physics and data. Right now I am
+            curious about how information becomes laws, how data turns into
+            inference, and how research ideas become working systems.
           </p>
           <div className="hero-actions">
             <a className="button button-primary" href="#contact">
@@ -192,7 +291,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="hero-card">
+        <div className="orbit-panel">
           <PhotonMark />
           <div className="hero-card-copy">
             <p className="card-label">Current orbit</p>
@@ -208,7 +307,7 @@ export default function Page() {
       <section className="content-section" id="about">
         <SectionTitle
           eyebrow="About"
-          title="A simple portrait from the words in my files"
+          title="A little about me"
           subtitle="AI & Physics Undergraduate · CUHK | AI Engineer"
         />
         <div className="about-grid">
@@ -220,9 +319,9 @@ export default function Page() {
               physics.
             </p>
             <p>
-              I build benchmarks, write PyTorch code, and just follow my
-              curiosity. If you work on algorithmic information theory, MDL,
-              quantum compression, or scientific ML, let's talk.
+              I build benchmarks, write PyTorch code, and follow my curiosity.
+              If you work on algorithmic information theory, MDL, quantum
+              compression, or scientific ML, let’s talk.
             </p>
           </article>
           <article className="panel panel-accent">
@@ -242,7 +341,7 @@ export default function Page() {
         <SectionTitle
           eyebrow="Experience"
           title="Work and research"
-          subtitle="A timeline built from the CV, with the Sebit update added for summer 2026."
+          subtitle="A timeline of what I’ve been building, studying, and shipping."
         />
         <div className="timeline">
           {experience.map((item) => (
@@ -262,7 +361,7 @@ export default function Page() {
         <SectionTitle
           eyebrow="Projects / Research"
           title="Selected work"
-          subtitle="Titles and phrasing are taken directly from your portfolio and CV wherever possible."
+          subtitle="A mix of physics, ML, scientific computing, and research projects."
         />
         <div className="project-grid">
           {projects.map((project) => (
@@ -275,11 +374,36 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="content-section" id="photos">
+        <SectionTitle
+          eyebrow="Photos"
+          title="A few moments"
+          subtitle="A small visual thread through research spaces, teams, and the quieter in-between."
+        />
+        <div className="photo-grid">
+          {photos.map((photo) => (
+            <article className="photo-card panel" key={photo.src}>
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                loading="eager"
+                decoding="async"
+                className="photo-image"
+              />
+              <div className="photo-caption">
+                <h3>{photo.title}</h3>
+                <p>{photo.caption}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="content-section" id="skills">
         <SectionTitle
           eyebrow="Skills"
           title="Tools, methods, and systems"
-          subtitle="Pulled from the CV and portfolio."
+          subtitle="What I use to build and research."
         />
         <div className="skill-cloud panel">
           {skills.map((skill) => (
@@ -294,21 +418,24 @@ export default function Page() {
         <SectionTitle
           eyebrow="Contact"
           title="Let’s talk"
-          subtitle="If you work on scientific ML, compression, astrophysics, or AI systems."
+          subtitle="Leave a comment and your contact info, and I’ll get back to you."
         />
-        <div className="contact-grid">
-          {contact.map((item) => (
-            <a
-              className="contact-card panel"
-              key={item.label}
-              href={item.href}
-              target={item.label === "Email" ? "_self" : "_blank"}
-              rel="noreferrer"
-            >
-              <p className="project-meta">{item.label}</p>
-              <h3>{item.value}</h3>
-            </a>
-          ))}
+        <div className="contact-layout">
+          <ContactForm />
+          <div className="contact-links">
+            {contactLinks.map((item) => (
+              <a
+                className="contact-card panel"
+                key={item.label}
+                href={item.href}
+                target={item.label === "Email" ? "_self" : "_blank"}
+                rel="noreferrer"
+              >
+                <p className="project-meta">{item.label}</p>
+                <h3>{item.value}</h3>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
     </main>
